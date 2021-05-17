@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'constants.dart';
 
-class innerIconContent extends StatelessWidget {
+class InnerIconContent extends StatelessWidget {
   final IconData iconName;
   final String iconHeading;
-  innerIconContent({@required this.iconName, @required this.iconHeading});
+
+  InnerIconContent({@required this.iconName, @required this.iconHeading});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class innerIconContent extends StatelessWidget {
         ),
         Text(
           iconHeading,
-          style: TextStyle(fontSize: 18.0, color: Color(0xFFFFFFFF)),
+          style: kLabelTextStyle,
         )
       ],
     );
