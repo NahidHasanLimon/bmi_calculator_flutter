@@ -1,8 +1,13 @@
+import 'package:bmi_calculator/calculator.dart';
+import 'package:bmi_calculator/screens/results_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'inner_icon_content.dart';
-import 'reusable_containerCard.dart';
-import 'constants.dart';
+import '../components/inner_icon_content.dart';
+import '../components/reusable_containerCard.dart';
+import '../constants.dart';
+import 'results_page.dart';
+import '../components/calculate_button.dart';
+import '../components/round_icon_button.dart';
 
 enum Gender {
   male,
@@ -17,29 +22,13 @@ class InputPage extends StatefulWidget {
 class _InputPageState extends State<InputPage> {
   Gender selectedGender;
   int sliderHeight = 180;
-  // Color maleCardColor = activeContainerCardColor;
-  // Color femaleCardColor = inactiveContainerCardColor;
-  // void updateCardColor(Gender selectedGender) {
-  //   print(selectedGender);
-  // selectedGender == Gender.Male
-  //     ? maleCardColor = activeContainerCardColor
-  //     : femaleCardColor = inactiveContainerCardColor;
-  // selectedGender == Gender.Female
-  //     ? maleCardColor = inactiveContainerCardColor
-  //     : femaleCardColor = activeContainerCardColor;
-  // maleCardColor = selectedGender == Gender.male
-  //     ? activeContainerCardColor
-  //     : inactiveContainerCardColor;
-  // femaleCardColor = selectedGender == Gender.female
-  //     ? activeContainerCardColor
-  //     : inactiveContainerCardColor;
-  // }
-
+  int weight = 75;
+  int age = 25;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('BMI CALCULATOR')),
+        title: kAppTitleStyle,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -113,10 +102,10 @@ class _InputPageState extends State<InputPage> {
                       inactiveTrackColor: kSliderInactiveColor,
                       overlayColor: kSliderOverLayColor,
                       thumbShape: RoundSliderThumbShape(
-                        enabledThumbRadius: 13.0,
+                        enabledThumbRadius: 10.0,
                       ),
                       overlayShape: RoundSliderOverlayShape(
-                        overlayRadius: 20,
+                        overlayRadius: 18,
                       ),
                     ),
                     child: Slider(
@@ -141,21 +130,105 @@ class _InputPageState extends State<InputPage> {
               child: Row(
             children: [
               Expanded(
-                child: ReUsableContainerCard(colorP: kActiveContainerCardColor),
+                child: ReUsableContainerCard(
+                  colorP: kActiveContainerCardColor,
+                  cardChild: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Weight',
+                        style: kLabelTextStyle,
+                      ),
+                      Text(
+                        weight.toString(),
+                        style: kNumberTextStyle,
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RoundIconButton(
+                              icon: FontAwesomeIcons.plus,
+                              onPressedWeight: () {
+                                setState(() {
+                                  weight++;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            RoundIconButton(
+                              icon: FontAwesomeIcons.minus,
+                              onPressedWeight: () {
+                                setState(() {
+                                  weight--;
+                                });
+                              },
+                            ),
+                          ]),
+                    ],
+                  ),
+                ),
               ),
               Expanded(
                 child: ReUsableContainerCard(
                   colorP: kActiveContainerCardColor,
+                  cardChild: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Age',
+                        style: kLabelTextStyle,
+                      ),
+                      Text(
+                        age.toString(),
+                        style: kNumberTextStyle,
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RoundIconButton(
+                              icon: FontAwesomeIcons.plus,
+                              onPressedWeight: () {
+                                setState(() {
+                                  age++;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            RoundIconButton(
+                              icon: FontAwesomeIcons.minus,
+                              onPressedWeight: () {
+                                setState(() {
+                                  age--;
+                                });
+                              },
+                            ),
+                          ]),
+                    ],
+                  ),
                 ),
               ),
             ],
           )),
-          Container(
-            color: kBottomContainerColor,
-            margin: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-            width: double.infinity,
-            height: kBottomContainerHeight,
-          )
+          CalculateButton(
+            buttonTitle: 'Calculate',
+            onTap: () {
+              CalculatorBrain calb =
+                  CalculatorBrain(height: sliderHeight, weight: weight);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ResultsPage(
+                      bmiResult: calb.calculateBMI(),
+                      bmiResultText: calb.getResult(),
+                      bmiResultInterpretation: calb.getInterpretation(),
+                    ),
+                  ));
+            },
+          ),
         ],
       ),
       // floatingActionButton: FloatingActionButton(
